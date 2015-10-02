@@ -4,7 +4,8 @@ function GameMap() {
     this.map = null;
     this.entities = {
         player: null,
-        ladders: []
+        ladders: [],
+        barrels: []
     };
     this.action = new Action();
 
@@ -22,6 +23,7 @@ GameMap.prototype.load = function() {
             self.map = JSON.parse(xhr.responseText);
             self.parse();
             self.applyEvents();
+            self.spawn();
         }
         catch(err) {
             console.error(err);
@@ -46,6 +48,13 @@ GameMap.prototype.parse = function() {
         }
 
     }
+
+};
+
+GameMap.prototype.spawn = function() {
+
+    this.entities.barrels.push(new Entity(this.map));
+    this.entities.barrels[0].setDirection(-1);
 
 };
 
@@ -89,9 +98,7 @@ GameMap.prototype.check = function() {
 
         for(var x = 0; x < this.map[y].length; x++) {
 
-            if(this.caseType(x, y) == 'Player' && !this.entities.player) {
-                this.entities.player = new Player();
-            }
+
 
         }
 

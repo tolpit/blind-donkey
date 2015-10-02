@@ -67,7 +67,7 @@ Audio.play = function(sound, position) {
 
         source.connect(stereoPanner);
         stereoPanner.connect(ctx.destination); // connect the source to the context's destination (the speakers)
-        
+
         source.start(0);
     });
 };
