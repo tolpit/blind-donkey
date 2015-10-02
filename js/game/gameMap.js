@@ -6,6 +6,7 @@ function GameMap() {
         player: null,
         ladders: []
     };
+    this.action = new Action();
 
     this.load();
 }
@@ -18,6 +19,7 @@ GameMap.prototype.load = function() {
         try {
             self.map = JSON.parse(xhr.responseText);
             self.parse();
+            self.applyEvents();
         }
         catch(err) {
             console.error(err);
@@ -29,13 +31,14 @@ GameMap.prototype.load = function() {
 };
 
 GameMap.prototype.parse = function() {
+    var self = this;
 
     for(var y = 0; y < this.map.length; y++) {
 
         for(var x = 0; x < this.map[y].length; x++) {
 
-            if(this.caseType(x, y) == 'Player') {
-                console.log('P', x, y);
+            if(this.caseType(x, y) == 'Player' && !this.entities.player) {
+                this.entities.player = new Player();
             }
 
         }
@@ -72,4 +75,24 @@ GameMap.prototype.caseType = function(x, y) {
 
     }
 
-}
+};
+
+GameMap.prototype.applyEvents = function() {
+
+    this.action.on('left', function() {
+       console.log('move left');
+    });
+
+    this.action.on('right', function() {
+        console.log('move right');
+    });
+
+    this.action.on('up', function() {
+        console.log('move up');
+    });
+
+    this.action.on('down', function() {
+        console.log('move down');
+    });
+
+};

@@ -1,3 +1,9 @@
 {
-
+  "background": "/assets/bacmusic.waw",
+  "comlete":  "/assets/complete.wav",
+  "death": "/assets/death.wav",
+  "intro": "/assets/intro.wav",
+  "jump": "/assets/jump.wav",
+  "jumpover": "/assets/jumpbar.wav",
+  "walking": "/assets/walking.wav"
 }

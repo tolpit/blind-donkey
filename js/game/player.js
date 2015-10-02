@@ -4,6 +4,8 @@ function Player() {
     this.x = 1; //TODO: x,y from the map.json
     this.y = 13; //TODO: x,y from the map.json
     this.height = 2; //TODO: height from the map.json
+
+    console.log(this);
 }
 
 Player.prototype.move = function(x, y) {
