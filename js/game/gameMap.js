@@ -9,6 +9,8 @@ function GameMap() {
     this.action = new Action();
 
     this.load();
+
+    setInterval(this.loop.bind(this), 1000);
 }
 
 GameMap.prototype.load = function() {
@@ -77,22 +79,47 @@ GameMap.prototype.caseType = function(x, y) {
 
 };
 
+GameMap.prototype.loop = function() {
+    //console.log(this.map);
+};
+
+GameMap.prototype.check = function() {
+    //console.log(this.map);
+    for(var y = 0; y < this.map.length; y++) {
+
+        for(var x = 0; x < this.map[y].length; x++) {
+
+            if(this.caseType(x, y) == 'Player' && !this.entities.player) {
+                this.entities.player = new Player();
+            }
+
+        }
+
+    }
+
+};
+
 GameMap.prototype.applyEvents = function() {
+    var self = this;
 
     this.action.on('left', function() {
-       console.log('move left');
+        self.entities.player.moveLeft();
+        self.check();
     });
 
     this.action.on('right', function() {
-        console.log('move right');
+        self.entities.player.moveRight();
+        self.check();
     });
 
     this.action.on('up', function() {
-        console.log('move up');
+        self.entities.player.moveUp();
+        self.check();
     });
 
     this.action.on('down', function() {
-        console.log('move down');
+        self.entities.player.moveDown();
+        self.check();
     });
 
 };
