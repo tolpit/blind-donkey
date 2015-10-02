@@ -1,67 +1,144 @@
 "use strict";
 
-function Player() {
-    this.x = 1; //TODO: x,y from the map.json
-    this.y = 13; //TODO: x,y from the map.json
-    this.height = 2; //TODO: height from the map.json
+var JUMPTIME = 2000;
 
-    console.log(this);
+function Player() {
+	this.height 	= 2;
+    this.x 			= null;
+    this.y 			= null;
+	this.map 		= null;
+	this.canClimb 	= false;
 }
 
 Player.prototype.move = function(x, y) {
-    this.x = x;
-    this.y = y;
+	var self = this;
 
-    console.log(this);
+	return new Promise(function(resolve, reject) {
+		var oldX = self.x;
+		var oldY = self.y;
+
+		//block the player on the game border
+		if(!GameMap.can(self.map, x, y)) return reject();
+		if(GameMap.win(self.map, x, y)) return resolve('win');
+
+		//Climb activator
+		self.canClimb = GameMap.canClimb(self.map, x, y);
+
+		self.x = x;
+		self.y = y;
+
+		//reset old pos to 0
+		self.map[oldY][oldX] = 0;
+		//self.map[oldY - 1][oldX] = 0;
+
+		self.map[self.y][self.x] = 2;
+		//self.map[self.y - 1][self.x] = 2;
+
+		return resolve();
+	});
+
 };
 
-Player.prototype.moveFrom = function(xDiff, yDiff) {
-    this.move(
-        this.x + xDiff,
-        this.y + yDiff
-    );
+Player.prototype.moveLeft = function() {
+    //console.log('Left');
+
+    this
+		.move(this.x - 1, this.y)
+		.then(function(win) {
+			if(win) {
+				Audio.play("complete");
+			}
+			else {
+				Audio.position("left")
+					  .play("walking");
+			}
+		})
+		.catch(function() {
+			Audio.play("stop");
+		});
 };
 
-Player.prototype.moveLeft = function(xDiff, yDiff) {
-    console.log('Left');
+Player.prototype.moveRight = function() {
+    //console.log('Right');
 
-    this.move(
-        this.x - 1,
-        this.y
-    );
-
-    Audio.play("walking", "left");
+    this
+		.move(this.x + 1, this.y)
+		.then(function(win) {
+			if(win) {
+				Audio.play("complete");
+			}
+			else {
+				Audio.position("right")
+					  .play("walking");
+			}
+		})
+		.catch(function() {
+			Audio.play("stop");
+		});
 };
 
-Player.prototype.moveRight = function(xDiff, yDiff) {
-    console.log('Right');
+Player.prototype.moveUp = function() {
+	var self = this;
 
-    this.move(
-        this.x + 1,
-        this.y
-    );
+	//climb
+    if(this.canClimb) {
+		this
+			.move(this.x, this.y - 1)
+			.then(function() {
+				Audio
+					.speed(.85)
+					.play("walking");
+			})
+			.catch(function() {
+				Audio
+					.speed(.75)
+					.play("walking");
+			});
+	}
+	//or jump
+	else {
+		this
+			.move(this.x, this.y - 1)
+			.then(function() {
+				//Jump over the barrel !
+				if(self.map[self.y + 1][self.x] == 8 || self.map[self.y + 1][self.x + 1] == 8 || self.map[self.y + 1][self.x - 1] == 8) {
+					Audio.play("jumpover");
+				}
+				//Basic jump
+				else {
+					Audio.play("jump");
+				}
 
-    Audio.play("walking", "right");
+				setTimeout(function() {
+					self.move(self.x, self.y + 1);
+				}, JUMPTIME);
+			})
+			.catch(function(err) {
+				console.log(err);
+				Audio.play("stop");
+			});
+	}
+
+
 };
 
-Player.prototype.moveUp = function(xDiff, yDiff) {
-    console.log('Jump');
-
-    this.move(
-        this.x,
-        this.y + 1
-    );
-
-    Audio.play("jump");
-};
-
-Player.prototype.moveDown = function(xDiff, yDiff) {
+Player.prototype.moveDown = function() {
     if(this.y <= 13) return;
 
-    console.log('Down');
+    //console.log('Down');
 
-    this.move(
-        this.x,
-        this.y - 1
-    );
+    this.move(this.x, this.y - 1);
+};
+
+Player.prototype.setPosition = function(x, y) {
+	this.x = x;
+	this.y = y;
+
+	return this;
+};
+
+Player.prototype.setMap = function(map) {
+	this.map = map;
+
+	return this;
 };

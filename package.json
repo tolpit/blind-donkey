@@ -1,0 +1,12 @@
+{
+  "name": "blind-donkeykong",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-live-server": "*"
+  },
+  "engines": {
+    "node": ">=0.12.2"
+  }
+}
