@@ -1,7 +1,7 @@
 (function() {
 
-	Audio.loadConfig();
+	var game = new GameMap();
 
-    var game = new GameMap();
+	Audio.loadConfig();
 
 })();

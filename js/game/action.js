@@ -13,6 +13,8 @@ function Action() {
     this.container.addEventListener('touchend', this.endHandle.bind(this), false);
     this.container.addEventListener('touchmove', this.moveHandle.bind(this), false);
 
+	document.addEventListener('keydown', this.keyHandle.bind(this), false);
+
     return this;
 }
 
@@ -140,4 +142,29 @@ Action.prototype.setDirection = function() {
             this.data.direction = "vertical";
         }
     }
+};
+
+Action.prototype.keyHandle = function(event) {
+
+	switch (event.keyCode) {
+
+		case 39:
+			this.emit('right');
+			break;
+
+		case 37:
+			this.emit('left');
+			break;
+
+		case 38:
+		case 32:
+			this.emit('up');
+			break;
+
+		case 40:
+			this.emit('down');
+			break;
+
+	}
+
 };

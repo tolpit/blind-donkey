@@ -8,7 +8,7 @@ function Barrel() {
     this.map;
 	this.original;
 
-    this.interval = setInterval(this.move.bind(this), 15000);
+    this.interval = setInterval(this.move.bind(this), 1000);
 }
 
 Barrel.prototype.move = function() {
@@ -37,10 +37,20 @@ Barrel.prototype.move = function() {
 	if(!GameMap.can(this.map, newX, newY)) return;
 	if(GameMap.hit(this.map, newX, newY))  return clearInterval(this.interval);
 
+
+
     if(newX) this.x = newX;
     if(newY) this.y = newY;
 
 	this.map[this.y][this.x] = 8;
+
+	this.sound();
+};
+
+Barrel.prototype.sound = function() {
+	/*Audio
+		.position(this.x, this.y, -90)
+		.play("barrel");*/
 };
 
 Barrel.prototype.setDirection = function(dir) {

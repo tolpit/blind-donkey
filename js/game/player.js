@@ -22,7 +22,15 @@ Player.prototype.move = function(x, y) {
 		if(GameMap.win(self.map, x, y)) return resolve('win');
 
 		//Climb activator
+		var oldClimbValue = self.canClimb;
+
 		self.canClimb = GameMap.canClimb(self.map, x, y);
+
+		if(self.canClimb === true && oldClimbValue === false) {
+			setTimeout(function() {
+				Audio.play("canclimb");
+			}, 1000);
+		}
 
 		self.x = x;
 		self.y = y;
@@ -118,8 +126,6 @@ Player.prototype.moveUp = function() {
 				Audio.play("stop");
 			});
 	}
-
-
 };
 
 Player.prototype.moveDown = function() {

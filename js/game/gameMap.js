@@ -10,10 +10,12 @@ function GameMap() {
     };
     this.action = new Action();
 
+	GameMap.canMove = true;
+
     this.load();
 
     this.interval = setInterval(this.loop.bind(this), 1000);
-	this.spawnInterval = setInterval(this.spawn.bind(this), 10000);
+	//this.spawnInterval = setInterval(this.spawn.bind(this), 15000);
 
 }
 
@@ -44,10 +46,9 @@ GameMap.prototype.spawn = function() {
 		newBarrel.setMap(this.map);
 		newBarrel.setOriginal(this.originalMap);
 
-
 	var length = this.entities.barrels.push(newBarrel);
-    this.entities.barrels[length - 1].setDirection(-1);
 
+	this.entities.barrels[length - 1].setDirection(-1);
 };
 
 GameMap.prototype.loop = function() {
@@ -59,7 +60,7 @@ GameMap.prototype.loop = function() {
 };
 
 GameMap.prototype.handleEvents = function() {
-	var playerPos = this.getPositionOf(2);
+	var playerPos = GameMap.getPositionOf(this.map, 2);
 
 	this.entities.player
 		.setPosition(playerPos.x, playerPos.y)
@@ -75,12 +76,12 @@ GameMap.prototype.handleEvents = function() {
 
 };
 
-GameMap.prototype.getPositionOf = function(type) {
+GameMap.getPositionOf = function(map, type) {
 	var position = {};
 
-	for(var y = 0; y < this.map.length; y++) {
-		for(var x = 0; x < this.map[y].length; x++) {
-			if(this.map[y][x] == 2) {
+	for(var y = 0; y < map.length; y++) {
+		for(var x = 0; x < map[y].length; x++) {
+			if(map[y][x] == type) {
 				position.x = x;
 				position.y = y;
 			}
@@ -92,14 +93,20 @@ GameMap.prototype.getPositionOf = function(type) {
 
 GameMap.can = function(map, x, y) {
 	return (
-		(y < (map.length) && y > 0) &&
-		(x < (map[0].length) && x > 0 && map[y][x] != 5)
+		GameMap.canMove && (
+			(y < (map.length) && y > 0) &&
+			(x < (map[0].length) && x > 0 && map[y][x] != 5)
+		)
 	);
 };
 
 GameMap.hit = function(map, x, y) {
-	if(map[y][x] == 2) {
+	if(map && map[y] && map[y][x] == 2) {
 		Audio.play("death");
+
+		clearInterval(this.spawnInterval);
+
+		GameMap.canMove = false;
 
 		return true;
 	}

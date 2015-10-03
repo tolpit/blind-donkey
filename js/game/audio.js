@@ -6,6 +6,7 @@ window.AudioContext = window.AudioContext||window.webkitAudioContext;
 var Audio = {
 	assets: {},
 	middlewares: [],
+	gameMap: null,
 	ctx: new AudioContext()
 };
 
@@ -43,8 +44,8 @@ Audio.loadAssets = function(index) {
 	var actualKey = keys[index];
 
 	if(!actualKey) { //End here
-		//Audio.stop("loading"); //If it's a good connection
-		//Audio.play("intro");
+		Audio.stop("loading"); //If it's a good connection
+		Audio.position("center").play("intro");
 		return;
 	}
 
@@ -54,7 +55,7 @@ Audio.loadAssets = function(index) {
 
 			 //Play the loading song when it's loaded
 			 if(actualKey == "loading") {
-				 //Audio.play("loading");
+				 Audio.play("loading");
 			 }
 
 			 //Load next asset
@@ -81,7 +82,7 @@ Audio.load = function(sound) {
 };
 
 //Choses where to play the sound (in the space)
-Audio.position = function(spaceX, spaceY) {
+Audio.position = function(spaceX, spaceY, spaceZ) {
 
 	//Left/right position
 	if(spaceX && !spaceY && typeof spaceX == "string") {
@@ -96,6 +97,10 @@ Audio.position = function(spaceX, spaceY) {
 			case "right":
 				xDeg = 45;
 				break;
+
+			case "center":
+				xDeg = 0;
+				break;
 		}
 
 		var zDeg = xDeg + 90;
@@ -106,15 +111,20 @@ Audio.position = function(spaceX, spaceY) {
 
 		var x = Math.sin(xDeg * (Math.PI / 180));
 		var z = Math.sin(zDeg * (Math.PI / 180));
+		var y = 0;
 
-		Audio.panner.setPosition(x, 0, z);
+		Audio.panner.setPosition(x, y, z);
 	}
 	//x, y position
 	else {
+		var x = Math.sin(spaceX * (Math.PI / 180));
+		var y = Math.sin(spaceY * (Math.PI / 180));
+		var z = Math.sin(spaceZ * (Math.PI / 180));
 
+		Audio.panner.setPosition(x, y, z);
 	}
 
-	Audio.middlewares.push({ position: [x, 0, z] });
+	Audio.middlewares.push({ position: [x, y, z] });
 
 	return Audio;
 };
@@ -125,8 +135,8 @@ Audio.speed = function(speed) {
 	return Audio;
 };
 
-Audio.time = function() {
-
+Audio.volume = function(value) {
+	Audio.middlewares.push({ gain: value });
 
 	return Audio;
 };
@@ -141,6 +151,10 @@ Audio.applyMiddlewares = function() {
 
 			case "speed":
 				Audio.source.playbackRate.value = middleware[name];
+				break;
+
+			case "gain":
+				console.log(Audio.source);
 				break;
 
 			default:

@@ -4,8 +4,10 @@
   "background": "/assets/backmusic.wav",
   "stop": "/assets/stop.mp3",
   "complete":  "/assets/complete.mp3",
-  "death": "/assets/death.wav",
   "intro": "/assets/intro.wav",
+  "death": "/assets/death.wav",
+  "barrel": "/assets/barrel.mp3",
+  "canclimb": "/assets/canclimb.mp3",
   "jump": "/assets/jump.wav",
   "jumpover": "/assets/jumpbar.wav",
   "walking": "/assets/walking.wav"
