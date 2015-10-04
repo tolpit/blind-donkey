@@ -1,23 +1,23 @@
 "use strict";
 
-window.AudioContext = window.AudioContext||window.webkitAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 //Static Object
 var Audio = {
-	assets: {},
+	assets: 	 {},
 	middlewares: [],
-	gameMap: null,
-	ctx: new AudioContext()
+	gameMap: 	 null,
+	ctx: 		 new AudioContext()
 };
 
 Audio.loadConfig = function() {
 	Audio.setup();
 
-    var xhr  = new XMLHttpRequest();
+    var request  = new XMLHttpRequest();
 
-    xhr.onload = function() {
+    request.onload = function() {
         try {
-			Audio.assets = JSON.parse(xhr.responseText); //set assets
+			Audio.assets = JSON.parse(request.responseText); //set assets
 
 			Audio.loadAssets(); //Load all the assets
         }
@@ -26,15 +26,13 @@ Audio.loadConfig = function() {
         }
     };
 
-    xhr.open('GET', '/audio.json');
-    xhr.send(null);
+    request.open('GET', '/audio.json');
+    request.send(null);
 };
 
 Audio.setup = function() {
 	Audio.panner 	= Audio.ctx.createPanner();
 	Audio.gain		= Audio.ctx.createGain();
-
-	Audio.gain.gain.value = 0.75;
 };
 
 Audio.loadAssets = function(index) {
@@ -44,8 +42,8 @@ Audio.loadAssets = function(index) {
 	var actualKey = keys[index];
 
 	if(!actualKey) { //End here
-		Audio.stop("loading"); //If it's a good connection
-		Audio.position("center").play("intro");
+		//Audio.stop("loading"); //If it's a good connection
+		//Audio.position("center").play("intro");
 		return;
 	}
 

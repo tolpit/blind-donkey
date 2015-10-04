@@ -10,16 +10,6 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="css/main.css" />
-        <script>
-            function extend(Child, Parent) {
-                var Synth = function() {};           // constructeur synthétique…
-                Synth.prototype = Parent.prototype;  // connecté au bon prototype…
-                Child.prototype = Object.create(Parent);       // le proto fils l’instancie…
-                Child.prototype.constructor = Child; // mais on recale constructor
-
-                Object.assign(Child, Parent);
-            }
-        </script>
     </head>
     <body>
         <div id="game">
@@ -29,8 +19,6 @@
                 Donkey Kong
             </h1>
         </div>
-
-        <script src="js/lib/eventEmitter.js"></script>
 
         <script src="js/game/audio.js"></script>
         <script src="js/game/action.js"></script>

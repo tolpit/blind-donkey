@@ -37,8 +37,6 @@ Barrel.prototype.move = function() {
 	if(!GameMap.can(this.map, newX, newY)) return;
 	if(GameMap.hit(this.map, newX, newY))  return clearInterval(this.interval);
 
-
-
     if(newX) this.x = newX;
     if(newY) this.y = newY;
 
@@ -48,9 +46,25 @@ Barrel.prototype.move = function() {
 };
 
 Barrel.prototype.sound = function() {
-	/*Audio
-		.position(this.x, this.y, -90)
-		.play("barrel");*/
+	var player = GameMap.getPositionOf(this.map, 2);
+	var diff   = {
+		x: player.x + this.x - 1,
+		y: player.y - this.y
+	};
+
+	var width  = this.map[0].length;
+	var height = this.map.length;
+
+	var xStep = 180/width;
+	var yStep = 360/9;
+
+	var xAngle = (xStep * diff.x) - 45;
+	var yAngle = (yStep * diff.y) - 90;
+
+	console.log(xAngle, yAngle);
+	Audio
+		.position(xAngle, yAngle, 180)
+		.play("barrel");
 };
 
 Barrel.prototype.setDirection = function(dir) {

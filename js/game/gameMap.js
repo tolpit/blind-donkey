@@ -52,10 +52,10 @@ GameMap.prototype.spawn = function() {
 };
 
 GameMap.prototype.loop = function() {
-	console.clear();
+	//console.clear();
 
 	for(var y = 0; y < this.map.length; y++) {
-		console.log(this.map[y]);
+		//console.log(this.map[y]);
 	}
 };
 
