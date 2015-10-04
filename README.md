@@ -1,5 +1,5 @@
-# Blind Monkey
-Adaptation du jeu Monkey Kong pour les sours et malentendant
+# Blind Donkey Kong
+Adaptation du jeu Donkey Kong pour les sours et malentendant
 
 ## Map :
 
